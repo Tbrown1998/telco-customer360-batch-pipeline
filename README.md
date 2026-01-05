@@ -189,7 +189,7 @@ Each arrow represents a deliberate permission boundary.
 ```
 telcocustomer360pipeline_lambdafunction
 ```
-![alt text](../imgs/lambda_role.png)
+![alt text](imgs/lambda_role.png)
 
 ### Responsibility
 This role allows Lambda to act as a **gatekeeper** at ingestion time:
@@ -254,7 +254,7 @@ This role allows Lambda to act as a **gatekeeper** at ingestion time:
 telcocustomer360pipeline_gluerole
 ```
 
-![alt text](../imgs/glue_role.png)
+![alt text](imgs/glue_role.png)
 
 ### Responsibility
 This role supports **data transformation only** and is shared by Glue Job A and Glue Job B.
@@ -320,7 +320,7 @@ This role supports **data transformation only** and is shared by Glue Job A and 
 ```
 StepFunctions-telco-customer-state-machine-role-ombadcmyn
 ```
-![alt text](../imgs/stepfunction_role.png)
+![alt text](imgs/stepfunction_role.png)
 
 ### Responsibility
 Allows Step Functions to act as a **pure orchestrator**:
@@ -375,7 +375,7 @@ This role does **not** touch data.
 Telco_pipeline_snowflake_role
 ```
 
-![alt text](../imgs/snowflake_role.png)
+![alt text](imgs/snowflake_role.png)
 
 ### Responsibility
 Allows Snowflake to securely read analytics-ready data from S3 via STS.
