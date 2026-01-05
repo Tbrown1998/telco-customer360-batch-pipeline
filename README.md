@@ -12,8 +12,8 @@ The project simulates **Data Engineering** concept of building and operating dat
 
 The final output supports **business analysts and BI tools** with clean, reliable, and historically accurate data.
 
-**Domain:** Data Engineering | Analytics Engineering
-**Stack:** AWS • Glue • Step Functions • Snowflake • S3
+- **⚙️ Domain:** Data Engineering | Analytics Engineering
+- **🧱 Stack:** AWS • Glue • Step Functions • Snowflake • S3
 
 ---
 
