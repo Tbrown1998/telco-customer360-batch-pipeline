@@ -1,123 +1,280 @@
-# Security Model  
-## Telco Customer 360 Orchestrated Data Pipeline
+## Telco Customer 360 Pipeline
+
+This document contains the **exact IAM policies attached to each role** in the Telco Customer 360 pipeline.
+
+All ARNs use **placeholders** to avoid exposing sensitive information.  
+Each policy is intentionally scoped to the **minimum permissions required**.
 
 ---
 
-## 1. Security Philosophy
+## 1️⃣ Lambda Ingestion Role
 
-The security model follows **least privilege**, **role isolation**, and **explicit trust relationships**.
+### Role Name
+```
+telcocustomer360pipeline_lambdafunction
+```
+![alt text](../imgs/lambda_role.png)
 
-No service:
-- shares credentials
-- assumes unnecessary permissions
-- has access beyond its responsibility
-
----
-
-## 2. AWS IAM Role Design
-
-Each AWS service operates under a **dedicated IAM role**.
-
-| Role | Service | Purpose |
-|---|---|---|
-| Lambda Ingestion Role | AWS Lambda | File validation and routing |
-| Glue Job Role | AWS Glue | ETL processing |
-| Step Functions Role | Step Functions | Workflow orchestration |
-| Snowflake Integration Role | Snowflake | Secure S3 access |
-
-Roles are never reused across services.
+### Responsibility
+This role allows Lambda to act as a **gatekeeper** at ingestion time:
+- validate incoming files
+- move files to the correct S3 zone
+- notify on failures
 
 ---
 
-## 3. Lambda Security
+### IAM Policy - Lambda Ingestion
 
-### Permissions
-- Read from `raw/`
-- Write to `archive/` and `rejected/`
-- Publish SNS alerts
-- Write CloudWatch logs
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "S3RawArchiveRejectedAccess",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::<BUCKET_NAME>/raw/*",
+        "arn:aws:s3:::<BUCKET_NAME>/archive/*",
+        "arn:aws:s3:::<BUCKET_NAME>/rejected/*"
+      ]
+    },
+    {
+      "Sid": "PublishIngestionAlerts",
+      "Effect": "Allow",
+      "Action": "sns:Publish",
+      "Resource": "arn:aws:sns:<REGION>:<ACCOUNT_ID>:<SNS_TOPIC_NAME>"
+    },
+    {
+      "Sid": "CloudWatchLogging",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
 
-### Restrictions
+### Explicitly NOT Allowed
 - No access to `clean/` or `staging/`
-- No Glue or Snowflake access
+- No Glue permissions
+- No Step Functions permissions
+- No Snowflake access
 
 ---
 
-## 4. Glue Security
+## 2️⃣ Glue ETL Role (Job A + Job B)
 
-### Permissions
-- Read from `archive/` and `clean/`
-- Write to `clean/` and `staging/`
-- Access Glue Data Catalog
-- Write logs to CloudWatch
+### Role Name
+```
+telcocustomer360pipeline_gluerole
+```
 
-### Execution
-- Jobs run under a service role
-- No interactive credentials
+![alt text](../imgs/glue_role.png)
 
----
-
-## 5. Step Functions Security
-
-### Permissions
-- Start Glue job runs
-- Read Glue job metadata
-- Emit execution logs
-
-Step Functions cannot read or write data directly.
+### Responsibility
+This role supports **data transformation only** and is shared by Glue Job A and Glue Job B.
 
 ---
 
-## 6. Snowflake Security Model
+### IAM Policy — Glue ETL
 
-### Storage Integration
-- Snowflake assumes an AWS IAM role
-- Read-only access to `staging/`
-- No access to raw or clean layers
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "S3ETLReadWrite",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::<BUCKET_NAME>/archive/*",
+        "arn:aws:s3:::<BUCKET_NAME>/clean/*",
+        "arn:aws:s3:::<BUCKET_NAME>/staging/*"
+      ]
+    },
+    {
+      "Sid": "GlueCatalogAccess",
+      "Effect": "Allow",
+      "Action": [
+        "glue:GetDatabase",
+        "glue:GetTable",
+        "glue:GetTables",
+        "glue:GetPartitions",
+        "glue:CreateTable",
+        "glue:UpdateTable"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CloudWatchLogging",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
 
-### Role-Based Access Control
-- ETL role owns schemas and procedures
-- Analyst roles have read-only access to `DW`
-
-No Snowflake credentials are stored in AWS.
+### Explicitly NOT Allowed
+- No Step Functions execution
+- No Snowflake access
+- No access outside ETL S3 zones
 
 ---
 
-## 7. Schema Ownership & Governance
+## 3️⃣ Step Functions Execution Role
 
-- ETL role owns:
-  - STAGING schema
-  - DW schema
-- ACCOUNTADMIN is not used for pipeline execution
+### Role Name
+```
+StepFunctions-telco-customer-state-machine-role-ombadcmyn
+```
+![alt text](../imgs/stepfunction_role.png)
 
-This enforces proper separation between administration and operations.
+### Responsibility
+Allows Step Functions to act as a **pure orchestrator**:
+- start Glue jobs
+- monitor Glue execution
 
----
-
-## 8. Audit & Observability
-
-- CloudWatch logs for AWS services
-- Snowflake task history and query history
-- SNS alerts for failures
-
-All actions are auditable.
+This role does **not** touch data.
 
 ---
 
-## 9. Security Benefits
+### IAM Policy - Step Functions
 
-This model ensures:
-- Reduced blast radius
-- Clear accountability
-- Compliance readiness
-- Production-grade isolation
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "GlueJobOrchestration",
+      "Effect": "Allow",
+      "Action": [
+        "glue:StartJobRun",
+        "glue:GetJob",
+        "glue:GetJobRun",
+        "glue:GetJobRuns"
+      ],
+      "Resource": "arn:aws:glue:<REGION>:<ACCOUNT_ID>:job/*"
+    },
+    {
+      "Sid": "CloudWatchLogging",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+### Explicitly NOT Allowed
+- No S3 access
+- No data read/write
+- No Snowflake access
+---
+
+## 4️⃣ Snowflake Storage Integration Role
+
+### Role Name
+```
+Telco_pipeline_snowflake_role
+```
+
+![alt text](../imgs/snowflake_role.png)
+
+### Responsibility
+Allows Snowflake to securely read analytics-ready data from S3 via STS.
 
 ---
 
-## 10. Summary
+### IAM Policy - Snowflake Integration
 
-Security is implemented as a **foundational design element**, not an afterthought.
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowSnowflakeReadStaging",
+      "Effect": "Allow",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::<BUCKET_NAME>/staging/*"
+    },
+    {
+      "Sid": "AllowSnowflakeListBucket",
+      "Effect": "Allow",
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::<BUCKET_NAME>",
+      "Condition": {
+        "StringLike": {
+          "s3:prefix": ["staging/*"]
+        }
+      }
+    }
+  ]
+}
+```
 
-The pipeline adheres to enterprise security standards across both AWS and Snowflake.
+### Explicitly NOT Allowed
+- No write or delete permissions
+- No access to `raw/`, `archive/`, or `clean/`
+- No access to any AWS service besides S3
 
 ---
+
+## 5️⃣ IAM Permission Boundary - Visual Summary
+
+```mermaid
+flowchart LR
+    Lambda[Lambda Role]
+    Glue[Glue Role]
+    SF[Step Functions Role]
+    Snowflake[Snowflake Role]
+
+    RAW[S3 Raw]
+    ARCH[S3 Archive]
+    CLEAN[S3 Clean]
+    STAGE[S3 Staging]
+    SNS[(SNS)]
+
+    Lambda --> RAW
+    Lambda --> ARCH
+    Lambda --> SNS
+
+    Glue --> ARCH
+    Glue --> CLEAN
+    Glue --> STAGE
+
+    SF --> Glue
+
+    Snowflake --> STAGE
+```
+
+---
+
+## 6️⃣ Summary
+
+The IAM policy design ensures that:
+- every service operates within a tight boundary
+- data quality is enforced by access control
+- security decisions are auditable and intentional
+
+This mirrors real enterprise data platforms where IAM is a **first-class architectural concern**.
