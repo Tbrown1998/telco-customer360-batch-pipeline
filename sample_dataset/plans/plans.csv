@@ -1,0 +1,21 @@
+plan_id,plan_name,monthly_price,data_allowance_gb,voice_minutes,sms_allowance,roaming_enabled,validity_days,plan_category
+P001,Premium Plan 1,2212.81,20,300,100,Y,365,Premium
+P002,Basic Plan 2,15072.69,2,2000,1000,Y,30,Basic
+P003,Basic Plan 3,5420.56,1,2000,100,N,30,Basic
+P004,Premium Plan 4,9428.44,1,300,1000,N,30,Premium
+P005,Basic Plan 5,19187.05,50,100,50,N,30,Basic
+P006,Basic Plan 6,7535.16,20,100,1000,Y,90,Basic
+P007,Basic Plan 7,6570.39,50,2000,100,Y,30,Basic
+P008,Premium Plan 8,23532.45,2,300,50,N,30,Premium
+P009,Premium Plan 9,25272.15,5,500,500,Y,365,Premium
+P010,Basic Plan 10,18796.44,2,2000,100,Y,30,Basic
+P011,Premium Plan 11,9193.51,10,500,50,Y,30,Premium
+P012,Ultra Plan 12,17244.26,2,300,500,Y,365,Ultra
+P013,Premium Plan 13,26713.47,200,300,500,Y,30,Premium
+P014,Premium Plan 14,16860.85,100,2000,1000,N,30,Premium
+P015,Business Plan 15,10884.91,200,100,50,Y,30,Business
+P016,Premium Plan 16,24074.26,100,2000,50,N,90,Premium
+P017,Premium Plan 17,14839.42,20,2000,50,Y,365,Premium
+P018,Ultra Plan 18,30533.36,50,100,500,N,30,Ultra
+P019,Premium Plan 19,28683.75,20,2000,100,Y,365,Premium
+P020,Basic Plan 20,13140.04,10,300,500,Y,180,Basic

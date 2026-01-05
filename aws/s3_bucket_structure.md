@@ -19,6 +19,8 @@ Every folder in the bucket has a **specific purpose** — nothing exists by acci
 
 ## 2. S3 Bucket Overview
 
+![alt text](../imgs/s3_repository.png)
+
 ### Bucket Name
 
 ```
@@ -49,16 +51,11 @@ Each top-level folder represents a **distinct data state**.
 
 ```mermaid
 flowchart LR
-    RAW[raw
-(Untrusted)]
-    ARCH[archive
-(Validated)]
-    REJ[rejected
-(Invalid)]
-    CLEAN[clean
-(Standardized)]
-    STAGE[staging
-(Analytics-ready)]
+    RAW["raw<br/>(Untrusted)"]
+    ARCH["archive<br/>(Validated)"]
+    REJ["rejected<br/>(Invalid)"]
+    CLEAN["clean<br/>(Standardized)"]
+    STAGE["staging<br/>(Analytics-ready)"]
 
     RAW -->|validate| ARCH
     RAW -->|fail| REJ
@@ -84,7 +81,7 @@ This structure is repeated consistently across all layers.
 
 ---
 
-## 6. RAW Zone — Landing Area
+## 6. RAW Zone - Landing Area
 
 ### Path
 ```
@@ -113,7 +110,7 @@ raw/activity_logs/
 
 ---
 
-## 7. ARCHIVE Zone — Validated Source of Truth
+## 7. ARCHIVE Zone - Validated Source of Truth
 
 ### Path
 ```
@@ -142,7 +139,7 @@ This zone represents the trusted input to ETL.
 
 ---
 
-## 8. REJECTED Zone — Failed Ingestion
+## 8. REJECTED Zone - Failed Ingestion
 
 ### Path
 ```
@@ -171,7 +168,7 @@ Rejected data never enters ETL.
 
 ---
 
-## 9. CLEAN Zone — Standardized Data
+## 9. CLEAN Zone - Standardized Data
 
 ### Path
 ```
@@ -200,7 +197,7 @@ This layer is suitable for reprocessing but not direct analytics.
 
 ---
 
-## 10. STAGING Zone — Warehouse Contract
+## 10. STAGING Zone - Warehouse Contract
 
 ### Path
 ```
