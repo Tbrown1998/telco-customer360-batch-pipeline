@@ -5,6 +5,29 @@
 
 ## 1. Architecture Objective
 
+```mermaid
+flowchart LR
+    A[External Source Systems] --> B[S3 Raw]
+    B --> C[Lambda: File Validation & Routing]
+    C -->|Valid| D[S3 Archive]
+    C -->|Invalid| E[S3 Rejected]
+
+    D --> F[EventBridge Schedule]
+    F --> G[Step Functions]
+
+    G --> H[Glue Job A: Clean & Standardize]
+    H --> I[S3 Clean]
+
+    I --> J[Glue Job B: Build Staging]
+    J --> K[S3 Staging]
+
+    K --> L[Snowflake External Stage]
+    L --> M[Snowflake Stored Procedures]
+    M --> N[Dim & Fact Tables]
+
+    N --> O[BI / Analytics Users]
+```
+
 The objective of this architecture is to design a **scalable, secure, and maintainable batch data pipeline** that ingests heterogeneous telecom data, enforces data quality, preserves historical changes, and delivers analytics-ready datasets to a cloud data warehouse.
 
 The architecture reflects **real-world enterprise patterns**, separating:
