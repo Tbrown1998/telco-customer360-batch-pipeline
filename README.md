@@ -8,7 +8,7 @@
 
 **Telco Customer 360** is a production, end-to-end **batch data pipeline** designed to consolidate customer, subscription, and activity data into an analytics-ready **Customer 360 warehouse**.
 
-The project simulates **Data Engineering** concept of building and operating data pipelines in a medium-to-large telecom organization—covering ingestion, validation, orchestration, transformation, historical tracking (SCD Type 2), and warehouse automation.
+The project simulates **Data Engineering** concept of building and operating data pipelines in a medium-to-large telecom organization covering ingestion, validation, orchestration, transformation, historical tracking (SCD Type 2), and warehouse automation.
 
 The final output supports **business analysts and BI tools** with clean, reliable, and historically accurate data.
 
@@ -157,7 +157,7 @@ stateDiagram-v2
 
 ---
 
-## Glue Job A — Clean & Standardize
+## Glue Job A - Clean & Standardize
 
 **Purpose**
 - Convert heterogeneous formats into consistent Parquet
@@ -186,7 +186,7 @@ clean/
 
 ---
 
-## Glue Job B — Build Staging Snapshots
+## Glue Job B - Build Staging Snapshots
 
 **Purpose**
 Prepare analytics-ready data.
@@ -235,7 +235,7 @@ TELCO_DB
 
 ---
 
-## 🕰️ SCD Type 2 — Customer History
+## 🕰️ SCD Type 2 - Customer History
 
 **Tracked changes**
 - Plan changes
