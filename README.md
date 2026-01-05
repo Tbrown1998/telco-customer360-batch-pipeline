@@ -1,4 +1,4 @@
-# Telco Customer 360 — Orchestrated Data Pipeline
+# Telco Customer - Orchestrated Data Pipeline
 
 ## Enterprise-Grade Batch Data Engineering Project (AWS + Snowflake)
 
@@ -11,6 +11,9 @@
 The project simulates **Data Engineering** concept of building and operating data pipelines in a medium-to-large telecom organization covering ingestion, validation, orchestration, transformation, historical tracking (SCD Type 2), and warehouse automation.
 
 The final output supports **business analysts and BI tools** with clean, reliable, and historically accurate data.
+
+**Domain:** Data Engineering | Analytics Engineering
+**Stack:** AWS • Glue • Step Functions • Snowflake • S3
 
 ---
 
