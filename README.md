@@ -13,7 +13,7 @@ The project simulates **Data Engineering** concept of building and operating dat
 The final output supports **business analysts and BI tools** with clean, reliable, and historically accurate data.
 
 - **⚙️ Domain:** Data Engineering | Analytics Engineering
-- **🧱 Stack:** AWS • Glue • Step Functions • Snowflake • S3
+- **🧠 Stack:** AWS • Glue • Step Functions • Snowflake • S3
 
 ---
 
@@ -137,7 +137,7 @@ flowchart LR
 
 ---
 
-## ⚙️ Orchestration & Scheduling
+## Orchestration & Scheduling
 
 ### EventBridge
 - Time-based batch schedule (e. daily)
@@ -238,7 +238,7 @@ TELCO_DB
 
 ---
 
-## 🕰️ SCD Type 2 - Customer History
+## SCD Type 2 - Customer History
 
 **Tracked changes**
 - Plan changes
@@ -298,7 +298,7 @@ SP_RUN_CUSTOMER360_PIPELINE
 
 ---
 
-## 🧠 Key Engineering Decisions
+## Key Engineering Decisions
 
 - Batch architecture over streaming (cost & simplicity)
 - Step Functions for orchestration
@@ -308,7 +308,7 @@ SP_RUN_CUSTOMER360_PIPELINE
 
 ---
 
-## 🏁 End-to-End Flow Summary
+## End-to-End Flow Summary
 
 ```mermaid
 flowchart LR
