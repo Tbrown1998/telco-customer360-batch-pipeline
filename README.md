@@ -2,6 +2,8 @@
 
 ## Enterprise-Grade Batch Data Engineering Project (AWS + Snowflake)
 
+![alt text](<imgs/Telco customer pipeline.jpg>)
+
 ---
 
 ## Overview
