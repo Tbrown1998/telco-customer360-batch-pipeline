@@ -46,7 +46,7 @@ Each compute component has a single, clearly defined responsibility.
 
 ---
 
-## 3. Lambda — Ingestion Validation & Routing
+## 3. Lambda - Ingestion Validation & Routing
 
 ### Why Lambda Exists
 Lambda protects the pipeline at the point of entry.  
@@ -86,7 +86,7 @@ This avoids long execution times, complex retries, and tight coupling with ETL.
 
 ---
 
-## 4. Glue Job A — Clean & Standardize
+## 4. Glue Job A - Clean & Standardize
 
 ### Purpose
 Glue Job A ensures **structural correctness**, not analytics.

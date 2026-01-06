@@ -1,6 +1,8 @@
 # Architecture Overview  
 ## Telco Customer 360 Orchestrated Data Pipeline
 
+![alt text](<../imgs/Telco customer pipeline.jpg>)
+
 ---
 
 ## 1. Architecture Objective

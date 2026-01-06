@@ -53,7 +53,9 @@ Step Functions decides **how** it runs.
 
 ---
 
-## 4. EventBridge — Pipeline Scheduler
+## 4. EventBridge - Pipeline Scheduler
+
+![alt text](../imgs/eventbridge.png)
 
 ### Role of EventBridge
 EventBridge is used purely as a **time-based scheduler**.
@@ -82,7 +84,9 @@ Batch windows provide determinism, which is critical for analytics pipelines.
 
 ---
 
-## 5. Step Functions — Workflow Orchestrator
+## 5. Step Functions - Workflow Orchestrator
+
+![alt text](../imgs/stepfunction.png)
 
 ### Role of Step Functions
 Step Functions acts as the **control plane** for the ETL workflow.
@@ -117,12 +121,12 @@ This guarantees data consistency across layers.
 
 ## 7. Glue Job Invocation Strategy
 
-### Glue Job A — Clean & Standardize
+### Glue Job A - Clean & Standardize
 - Reads validated source data
 - Enforces schemas
 - Writes standardized Parquet
 
-### Glue Job B — Build Staging
+### Glue Job B - Build Staging
 - Deduplicates data
 - Resolves latest entity state
 - Produces analytics-ready snapshots
