@@ -127,7 +127,7 @@ Keeping this job narrow improves debuggability, reuse, and performance predictab
 
 ---
 
-## 5. Glue Job B — Build Staging Snapshots
+## 5. Glue Job B - Build Staging Snapshots
 
 ### Purpose
 Glue Job B prepares data for warehouse ingestion.
